@@ -287,8 +287,8 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
   <main class="card hidden" id="hypoTab">
     <header><span class="icon">💡</span><span>3) Hypothesis</span></header>
     <section class="section">
-      <div class="kb"><button class="ghost" id="hypoScaffoldToggle">Show Scaffold</button></div>
-      <div id="hypoScaffold" class="hidden">
+      <div class="kb"><button class="ghost" id="hypoInstructionsToggle">Show Instructions</button></div>
+      <div id="hypoInstructions" class="hidden">
         <div class="mini">
           <header>What is a hypothesis?</header>
           <p class="helper">A hypothesis is your best guess, written in one clear sentence, about whether insects could be a good protein source in the future.</p>
@@ -320,10 +320,10 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
   <main class="card hidden" id="findingsTab">
     <header><span class="icon">📖</span><span>4) Expected Findings (300–400 words)</span></header>
     <section class="section">
-      <div class="kb"><button class="ghost" id="findingsScaffoldToggle">Show Scaffold</button></div>
-      <div id="findingsScaffold" class="hidden">
+      <div class="kb"><button class="ghost" id="findingsInstructionsToggle">Show Instructions</button></div>
+      <div id="findingsInstructions" class="hidden">
         <div class="mini">
-          <header>Scaffold for Writing</header>
+          <header>Instructions for Writing</header>
           <ol class="helper">
             <li>Restate your hypothesis.</li>
             <li>Evidence from Issues.</li>
@@ -551,18 +551,18 @@ document.addEventListener('DOMContentLoaded', function(){
     state.findings = qs('findings').value; save(); updateWC();
   });
 
-  // Scaffold toggle helpers
-  function bindScaffold(btnId, boxId){
+  // Instructions toggle helpers
+  function bindInstructionsToggle(btnId, boxId){
     const btn = qs(btnId);
     const box = qs(boxId);
     if(!btn || !box) return;
     btn.addEventListener('click', ()=>{
       const hidden = box.classList.toggle('hidden');
-      btn.textContent = hidden ? 'Show Scaffold' : 'Hide Scaffold';
+      btn.textContent = hidden ? 'Show Instructions' : 'Hide Instructions';
     });
   }
-  bindScaffold('hypoScaffoldToggle','hypoScaffold');
-  bindScaffold('findingsScaffoldToggle','findingsScaffold');
+  bindInstructionsToggle('hypoInstructionsToggle','hypoInstructions');
+  bindInstructionsToggle('findingsInstructionsToggle','findingsInstructions');
 
   // Findings lock/unlock
   function applyFindingsLock(){
