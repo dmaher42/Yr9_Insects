@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Year 9 Inquiry – Insects as Sustainable Protein (v26)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F3EA; --leaf:#2E7D32; --leaf-2:#81C784; --lime:#C6FF00; --earth:#5D4037;
+  --sand:#EFE9D1; --ink:#223; --muted:#576166; --card:#FFFFFF; --ring:#a7dca7; --border:#e2dcc6;
+  --shadow:0 8px 22px rgba(34,51,34,.15);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; color:var(--ink); background:linear-gradient(180deg,var(--bg),#fff); font-family:Roboto, system-ui, -apple-system, Segoe UI, Arial}
+.container{width:min(1280px, 96vw); margin:0 auto; padding:20px}
+.header{display:flex; gap:16px; align-items:center; justify-content:space-between; flex-wrap:wrap; padding:14px 16px;
+  background:linear-gradient(180deg,#F8F5E9,#FFF); border:1px solid var(--border); border-radius:20px; box-shadow:var(--shadow)}
+.brand{display:flex; gap:12px; align-items:center}
+.logo{width:50px; height:50px; border-radius:15px; display:grid; place-items:center; font-family:Montserrat; font-weight:700; font-size:18px; color:#0b2b0b;
+  background: conic-gradient(from 90deg,#81C784,#C6FF00,#81C784); box-shadow:0 0 0 3px #e3f5e3 inset}
+h1{margin:0; font-family:Montserrat; font-weight:700; font-size:22px}
+.sub{margin-top:2px; font-size:13px; color:var(--muted)}
+.controls{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+button{appearance:none; border:none; cursor:pointer; border-radius:14px; padding:10px 14px; font-weight:600; font-size:15px;
+  color:#0b2b0b; background:linear-gradient(180deg,#d7ffd7,#8ee08e); box-shadow:var(--shadow)}
+button.ghost{background:#fff; color:var(--leaf); border:1px solid var(--leaf-2)}
+button:disabled{opacity:.6; cursor:not-allowed}
+.badges{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px}
+.badge{padding:6px 10px; border-radius:999px; background:#fff; border:1px solid var(--border); color:var(--muted); font-size:12px}
+
+.tabbar{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; background:#fff; border:1px solid var(--border); border-radius:16px; padding:8px; box-shadow:var(--shadow)}
+.tab{background:#fff; border:1px solid var(--border); color:var(--ink); padding:10px 14px; border-radius:12px; font-weight:600}
+.tab.active{border-color:var(--leaf-2); box-shadow:0 0 0 3px #e5f7e5}
+.tab .icon{margin-right:6px}
+.tab .tick{margin-left:8px; color:var(--leaf); display:none}
+.tab.done .tick{display:inline}
+
+.card{background:var(--card); border:1px solid var(--border); border-radius:20px; padding:18px; margin-top:16px; box-shadow:var(--shadow);
+  transition:transform .18s ease, box-shadow .18s ease}
+.card:hover{transform:translateY(-2px); box-shadow:0 10px 18px rgba(0,0,0,.18)}
+.card header{display:flex; align-items:center; gap:10px; font-family:Montserrat; font-weight:600; border-bottom:1px dashed #e2e2cc; padding-bottom:8px; margin-bottom:10px}
+.card header .icon{font-size:20px}
+.section{display:grid; gap:10px}
+.mini{background:#fff; border:1px solid var(--border); border-radius:14px; padding:12px; box-shadow:0 3px 8px rgba(34,51,34,.06)}
+.mini + .mini{margin-top:12px}
+.mini header{font-weight:700; margin-bottom:6px; color:#2b4b2b}
+
+label{font-weight:600; color:#394344}
+input, textarea{
+  width:100%; background:#fff; color:var(--ink); border:1px solid var(--border); border-radius:12px;
+  padding:10px 12px; font-size:15px; outline:none; transition:box-shadow .18s ease, border-color .18s ease;
+}
+input:focus, textarea:focus{box-shadow:0 0 0 3px var(--ring)}
+textarea{min-height:240px; resize:vertical}
+.helper{font-size:13px; color:var(--muted)}
+.kb{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0}
+.chip{background:#f4fbf4; border:1px solid #d8efd8; color:#2b4b2b; padding:4px 8px; border-radius:999px; font-size:12px}
+
+.hidden{display:none}
+
+.progressWrap{display:flex; gap:14px; align-items:center}
+#progressLabel{font-size:14px; color:var(--muted)}
+.ring{position:relative; width:64px; height:64px}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute; inset:0; display:grid; place-items:center; font-family:Montserrat; font-weight:700; font-size:14px; color:#1d4f1d}
+
+.status{margin-top:10px; padding:10px; border-radius:12px; border:1px solid #d8efd8; background:#f4fbf4; color:#204420; display:none}
+.savebadge{font-size:12px; color:var(--muted)}
+
+/* Feedback tiles */
+.tip{padding:10px 12px; border-radius:12px; margin:6px 0; display:flex; align-items:center; justify-content:space-between; gap:10px; border:1px solid #e5f1e5}
+.tip.ok{background:#f0faf0; border-color:#cfe9cf; color:#1f4d1f}
+.tip.warn{background:#fff9e6; border-color:#ffe2a6; color:#6a4b00}
+.tip.bad{background:#fff0f0; border-color:#ffcdcd; color:#7a1f1f}
+.tip .actions{display:flex; gap:8px}
+.tip .btn{padding:6px 10px; border-radius:10px; font-size:13px; box-shadow:none; border:1px solid #d5d5d5; background:#fff; cursor:pointer}
+
+@media (min-width: 1200px){
+  .header{padding:18px 20px}
+  .tabbar{gap:12px; padding:10px}
+  .card{padding:22px}
+}
+
+@media print{
+  body{background:#fff; color:#000}
+  .header, .tabbar, .status, #compatNotice, #driveOverlay, #focusOverlay, #pinOverlay{display:none !important}
+  .card{box-shadow:none; border:1px solid #bbb}
+  .print-block{page-break-after:always}
+}
+/* Focus button */
+button#focusBtn{background:linear-gradient(180deg,#ffe9b8,#ffd27a); color:#6a3a00; border:1px solid #ffc25e}
+button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color:#0b3b26; border:1px solid #7cdeb3}
+.badge#offTaskBadge{background:#fff7f0; border-color:#ffd7b5; color:#6a3a00}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="brand">
+      <div class="logo">Y9</div>
+      <div>
+        <h1>Year 9 Inquiry – Insects as Sustainable Protein</h1>
+        <div class="sub"><b>Part 3: Forming a Research Inquiry</b> · Autosaves offline</div>
+        <div class="badges">
+          <div class="badge">Chromebook-friendly</div>
+          <div class="badge">Single-file</div>
+          <div class="badge">300–400 words</div>
+          <div class="badge savebadge" id="saveBadge">Saved just now</div>
+          <div class="badge" id="offTaskBadge" title="Time the tab was not active">Off‑task: 0:00</div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="progressWrap" aria-live="polite">
+        <div class="ring" aria-label="Progress ring">
+          <svg width="64" height="64">
+            <circle cx="32" cy="32" r="28" fill="none" stroke="#e8f4e8" stroke-width="8"/>
+            <circle id="ringFg" cx="32" cy="32" r="28" fill="none" stroke="#81C784" stroke-linecap="round" stroke-width="8" stroke-dasharray="176" stroke-dashoffset="176"/>
+          </svg>
+          <div class="pct" id="pct">0%</div>
+        </div>
+        <div id="progressLabel">0 of 4 complete</div>
+      </div>
+      
+      <button id="saveBtn" title="Save now">Save</button>
+      <button id="copyTextBtn" title="Copy all text to clipboard">Copy Text</button>
+      <button class="ghost" id="printBtn" title="Print or save as PDF">Print / PDF</button>
+    </div>
+  </div>
+
+  <nav class="tabbar" role="tablist" aria-label="Sections">
+    <button class="tab active" id="tabIntro" role="tab" aria-selected="true"><span class="icon">🐛</span>Intro &amp; Instructions</button>
+    <button class="tab" id="tabIssues" role="tab" aria-selected="false"><span class="icon">🌍</span>Issues <span class="tick">✔</span></button>
+    <button class="tab" id="tabProsCons" role="tab" aria-selected="false"><span class="icon">⚖️</span>Pros &amp; Cons <span class="tick">✔</span></button>
+    <button class="tab" id="tabHypo" role="tab" aria-selected="false"><span class="icon">💡</span>Hypothesis <span class="tick">✔</span></button>
+    <button class="tab" id="tabFindings" role="tab" aria-selected="false"><span class="icon">📖</span>Findings <span class="tick">✔</span></button>
+    <button class="tab" id="tabRubric" role="tab" aria-selected="false"><span class="icon">📊</span>Rubric</button>
+    <button class="tab" id="tabFeedback" role="tab" aria-selected="false"><span class="icon">💬</span>Feedback</button>
+  </nav>
+
+  <div id="statusArea" class="status" role="status" aria-live="polite"></div>
+  <div id="compatNotice" class="status" style="display:none">If buttons don’t work, download and open this file from your Downloads folder (not the Drive preview).</div>
+
+  <main class="card" id="introTab">
+    <header><span class="icon">🐛</span><span>Intro &amp; Instructions</span></header>
+    <section class="section">
+      <div class="mini">
+        <header>Overview</header>
+        <p>You are investigating the future of <b>insects as a sustainable protein source</b>. Your job is to build a short research inquiry and explain your findings clearly.</p>
+      </div>
+      <div class="mini">
+        <header>Steps to complete</header>
+        <ol>
+          <li><b>Issues (🌍):</b> Write at least 3 current issues and 3 future issues with traditional protein sources.</li>
+          <li><b>Pros &amp; Cons (⚖️):</b> List at least 3 pros and 3 cons of using insects as protein.</li>
+          <li><b>Hypothesis (💡):</b> Write one clear sentence answering if insects are a viable large-scale protein source (include timeframe/conditions).</li>
+          <li><b>Findings (📖):</b> Write a 300–400 word report. Restate your hypothesis, use evidence, explain conditions/limitations, and conclude clearly.</li>
+          <li><b>Feedback (💬):</b> Check automatic feedback, review the rubric, and read teacher notes if provided.</li>
+        </ol>
+      </div>
+      <div class="mini">
+        <header>Success tips</header>
+        <ul>
+          <li>Aim for clear, specific points in dot-point sections.</li>
+          <li>Keep your hypothesis short, direct, and testable.</li>
+          <li>Stay between <b>300–400 words</b> for Findings.</li>
+          <li>Use the <b>Rubric (📊)</b> to understand how your work is graded.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <main class="card hidden" id="issuesTab">
+    <header><span class="icon">🌍</span><span>1) Current &amp; Future Issues</span></header>
+    <section class="section">
+      <div class="mini">
+        <header>Instructions</header>
+        <ul class="helper"><li><b>Minimum:</b> 3 dot points in each box.</li></ul>
+      </div>
+      <div class="mini">
+        <header>Current issues</header>
+        <textarea id="issuesNow" placeholder="• …&#10;• …&#10;• …"></textarea>
+      </div>
+      <div class="mini">
+        <header>Future issues</header>
+        <textarea id="issuesFuture" placeholder="• …&#10;• …&#10;• …"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <main class="card hidden" id="prosconsTab">
+    <header><span class="icon">⚖️</span><span>2) Pros &amp; Cons</span></header>
+    <section class="section">
+      <div class="mini">
+        <header>Instructions</header>
+        <ul class="helper"><li><b>Minimum:</b> 3 points in each box.</li></ul>
+      </div>
+      <div class="mini">
+        <header>Pros</header>
+        <textarea id="pros" placeholder="• …&#10;• …&#10;• …"></textarea>
+      </div>
+      <div class="mini">
+        <header>Cons</header>
+        <textarea id="cons" placeholder="• …&#10;• …&#10;• …"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <main class="card hidden" id="hypoTab">
+    <header><span class="icon">💡</span><span>3) Hypothesis</span></header>
+    <section class="section">
+      <div class="mini">
+        <header>Instructions</header>
+        <p class="helper">Write ONE clear sentence that states your claim, including where/when/conditions. End with a full stop.</p>
+      </div>
+      <div class="mini">
+        <header>Your hypothesis</header>
+        <input id="hypo" placeholder="Write one clear sentence." type="text"/>
+      </div>
+    </section>
+  </main>
+
+  <main class="card hidden" id="findingsTab">
+    <header><span class="icon">📖</span><span>4) Expected Findings (300–400 words)</span></header>
+    <section class="section">
+      <div class="mini">
+        <header>Helpful tools</header>
+        <div class="kb">
+          <button class="ghost" id="addStarters">Sentence starters</button>
+        </div>
+        <div class="helper" id="wc">Word count: 0 (target 300–400)</div>
+        <div id="wcCoaching" class="kb"></div>
+      </div>
+      <div class="mini">
+        <header>Guidance</header>
+        <ol class="helper">
+          <li>Restate your hypothesis.</li>
+          <li>Use evidence from your Issues and Pros/Cons tabs.</li>
+          <li>Note important conditions or limitations.</li>
+          <li>Finish with a clear conclusion (yes/no/depends) and why.</li>
+        </ol>
+      </div>
+      <div class="mini">
+        <header>Your writing</header>
+        <textarea id="findings" style="min-height:300px;"></textarea>
+        <div class="kb">
+          <button id="markDone">Mark Finished ✅</button>
+          <button class="ghost hidden" id="editAgain">Edit Again ✏️</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <main class="card hidden" id="rubricTab">
+    <header><span class="icon">📊</span><span>Assessment Rubric — Biomes &amp; Food Security (Part 3)</span></header>
+    <section class="section">
+      <p class="helper">Taken directly from the unit task sheet’s Achievement Standards (A–E).</p>
+      <div class="helper">Scroll horizontally on smaller screens.</div>
+      <div style="overflow:auto">
+      <table border="1" cellpadding="8" cellspacing="0" style="min-width:920px; width:100%; border-collapse:collapse; font-size:14px; line-height:1.35">
+        <tr style="background:#eaf6ea; color:#1f3b1f">
+          <th style="width:22%">Criterion</th>
+          <th style="width:15%">A</th>
+          <th style="width:15%">B</th>
+          <th style="width:15%">C</th>
+          <th style="width:15%">D</th>
+          <th style="width:15%">E</th>
+        </tr>
+        <tr>
+          <td><b>1. Geographical Processes</b></td>
+          <td>Students comprehensively explain how geographical processes change the characteristics of places.</td>
+          <td>Students effectively explain how geographical processes change the characteristics of places.</td>
+          <td>Students explain how geographical processes change the characteristics of places.</td>
+          <td>Students provide limited explanations of how geographical processes change the characteristics of places.</td>
+          <td>Students provide minimal explanations of how geographical processes change the characteristics of places.</td>
+        </tr>
+        <tr>
+          <td><b>5. Forming Inquiries</b></td>
+          <td>Students thoughtfully use initial research to identify perceptive and geographically significant questions to frame an inquiry.</td>
+          <td>Students effectively use initial research to identify geographically significant questions to frame an inquiry.</td>
+          <td>Students use initial research to identify geographically significant questions to frame an inquiry.</td>
+          <td>Students use limited research to identify basic geographic questions to frame an inquiry.</td>
+          <td>Students use minimal research to identify limited geographic questions to frame an inquiry.</td>
+        </tr>
+        <tr>
+          <td><b>7. Presenting Data</b></td>
+          <td>Students perceptively record and represent multi-variable data in a range of complex digital and non-digital forms, including a range of maps that comply with cartographic conventions.</td>
+          <td>Students effectively record and represent multi-variable data in a range of appropriate digital and non-digital forms, including a range of maps that comply with cartographic conventions.</td>
+          <td>Students record and represent multi-variable data in a range of appropriate digital and non-digital forms, including a range of maps that comply with cartographic conventions.</td>
+          <td>Students record and represent limited data in a narrow range of appropriate digital and non-digital forms, including a range of maps that comply with cartographic conventions.</td>
+          <td>Students record and represent minimal data in a very narrow range of appropriate digital and non-digital forms.</td>
+        </tr>
+        <tr>
+          <td><b>8. Interpreting Data</b></td>
+          <td>Students use a wide range of purposeful methods and sophisticated digital technologies to interpret and critically analyse maps, data and other information to propose explanations for patterns, trends, relationships and anomalies across time and space, and to predict outcomes. Students perceptively synthesise data and information to draw well-reasoned conclusions.</td>
+          <td>Students effectively use a range of methods and digital technologies to interpret and analyse maps, data and other information to propose explanations for patterns, trends, relationships and anomalies across time and space, and to predict outcomes. Students effectively synthesise data and information to draw reasoned conclusions.</td>
+          <td>Students use a range of methods and digital technologies to interpret and analyse maps, data and other information to propose explanations for patterns, trends, relationships and anomalies across time and space, and to predict outcomes. Students synthesise data and information to draw reasoned conclusions.</td>
+          <td>Students use a narrow range of methods and digital technologies to interpret and analyse maps, data and other information to propose limited explanations for patterns, trends, relationships and anomalies across time and space, and to predict outcomes. Students synthesise limited data and information to draw conclusions.</td>
+          <td>Students use a very narrow range of methods and digital technologies to interpret maps, data and other information to propose minimal explanations for patterns, trends, relationships and anomalies across time and space, and to predict outcomes. Students refer to minimal data and information to draw limited conclusions.</td>
+        </tr>
+        <tr>
+          <td><b>9. Geographical Terminology</b></td>
+          <td>Students present insightful findings, arguments and explanations using complex geographical terminology and digital representations in a range of highly effective communication forms.</td>
+          <td>Students effectively present findings, arguments and explanations using relevant geographical terminology and digital representations in a range of appropriate communication forms.</td>
+          <td>Students present findings, arguments and explanations using relevant geographical terminology and digital representations in a range of appropriate communication forms.</td>
+          <td>Students present limited findings, arguments and explanations using relevant geographical terminology and digital representations in a narrow range of appropriate communication forms.</td>
+          <td>Students present minimal findings, arguments and explanations using some geographical terminology and digital representations in a limited range of communication forms.</td>
+        </tr>
+        <tr>
+          <td><b>10. Presenting Information</b></td>
+          <td>Students present insightful findings, arguments and explanations using complex geographical terminology and digital representations in a range of highly effective communication forms.</td>
+          <td>Students effectively present findings, arguments and explanations using relevant geographical terminology and digital representations in a range of appropriate communication forms.</td>
+          <td>Students present findings, arguments and explanations using relevant geographical terminology and digital representations in a range of appropriate communication forms.</td>
+          <td>Students present limited findings, arguments and explanations using relevant geographical terminology and digital representations in a narrow range of appropriate communication forms.</td>
+          <td>Students present minimal findings, arguments and explanations using some geographical terminology and digital representations in a limited range of communication forms.</td>
+        </tr>
+      </table>
+      </div>
+      <p class="helper">Tip: Use the Feedback tab for quick checks against each criterion before you copy/print.</p>
+    </section>
+  </main>
+
+  <main class="card hidden" id="feedbackTab">
+    <header><span class="icon">💬</span><span>Feedback</span></header>
+    <section class="section">
+      <div id="autoFeedback" class="helper" style="line-height:1.55"></div>
+      <div class="mini">
+        <header>Student reflection</header>
+        <p class="helper">Write one change you will make based on the feedback.</p>
+        <textarea id="studentReflection" placeholder="My next change will be…"></textarea>
+      </div>
+      <div class="mini">
+        <header>Teacher feedback (optional)</header>
+        <textarea id="teacherFb" placeholder="Quick notes from your teacher…"></textarea>
+      </div>
+      <div class="mini">
+        <header>Focus tracker</header>
+        <p class="helper">This records time when the tab or window is not active.</p>
+        <div class="kb"><span class="chip" id="offTaskLabel">Off‑task: 0:00</span>
+        <button class="ghost" id="resetOffTask">Reset</button></div>
+        <div class="helper" id="offTaskLog" style="margin-top:6px"></div>
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<!-- Drive preview overlay -->
+<div id="driveOverlay" style="display:none; position:fixed; inset:0; background:rgba(20,25,20,.92); color:#fff; z-index:9999; padding:20px; font-size:18px">
+  This file is open in Google Drive preview, which blocks buttons.<br/><br/>
+  <b>How to use:</b><br/>
+  1) Click the <i>Download</i> icon.<br/>
+  2) Open the file from your <b>Downloads</b> folder.<br/>
+  3) All features will work and autosave locally.
+</div>
+
+<!-- Focus Mode start overlay -->
+<p style="opacity:.7; font-size:14px">If fullscreen does not start, your browser needs a click first. Click the button again.</p>
+  </div>
+</div>
+
+<!-- PIN overlay for unlocking -->
+<div id="pinMsg" style="min-height:20px; color:#ffd0d0"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const KEY = "y9_insect_tabs_v26";
+  const fields = {issuesNow:"",issuesFuture:"",pros:"",cons:"",hypo:"",findings:"", findingsLocked:false, teacherFb:"", studentReflection:"", offTaskSeconds:0, offTaskEvents:[], focusMode:false};
+  const TEACHER_PIN = (localStorage.getItem(KEY+'_pin') || '9153');
+  function setTeacherPin(pin){ localStorage.setItem(KEY+'_pin', String(pin)); }
+  function nowISO(){ try{ return new Date().toISOString(); }catch(e){ return String(Date.now()); } }
+
+  let state = load() || fields;
+  const totalSections = 4;
+  const qs = id => document.getElementById(id);
+  const wc = s => (s||"").trim().split(/\\s+/).filter(Boolean).length;
+  const lineCount = s => (s||"").split(/\\n/).filter(l=>l.trim().length>0).length;
+
+  function save(){ localStorage.setItem(KEY, JSON.stringify(state)); stampSave(); updateProgress(); updateAutoFeedback(); }
+  function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; } }
+  function stampSave(){ const el=qs('saveBadge'); if(!el) return; const t=new Date(); el.textContent = 'Saved ' + t.toLocaleTimeString(); }
+
+  function switchTab(name){
+    ['intro','issues','proscons','hypo','findings','rubric','feedback'].forEach(n=>{
+      qs(n+'Tab').classList.add('hidden');
+      const tb = qs('tab'+capitalize(n));
+      if(tb){ tb.classList.remove('active'); tb.setAttribute('aria-selected','false'); }
+    });
+    qs(name+'Tab').classList.remove('hidden');
+    const tb = qs('tab'+capitalize(name)); if(tb){ tb.classList.add('active'); tb.setAttribute('aria-selected','true'); }
+  }
+  function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+  function fmtTime(s){ s=Math.max(0, Math.floor(s)); const m=Math.floor(s/60), ss=String(s%60).padStart(2,'0'); return m+':'+ss; }
+
+  // Go-to helper (used by Feedback tiles)
+  function goTab(name, focusId){ switchTab(name); setTimeout(()=>{ const el=qs(focusId); if(el){ el.focus(); el.scrollIntoView({behavior:'smooth', block:'center'}); } }, 0); }
+
+  // Tab bindings
+  qs('tabIntro').onclick=()=>switchTab('intro');
+  qs('tabIssues').onclick=()=>switchTab('issues');
+  qs('tabProsCons').onclick=()=>switchTab('proscons');
+  qs('tabHypo').onclick=()=>switchTab('hypo');
+  qs('tabFindings').onclick=()=>switchTab('findings');
+  qs('tabRubric').onclick=()=>switchTab('rubric');
+  qs('tabFeedback').onclick=()=>switchTab('feedback');
+
+  // Inputs bind
+  ['issuesNow','issuesFuture','pros','cons','hypo','findings','teacherFb','studentReflection'].forEach(id=>{
+    const el = qs(id);
+    if(!el) return;
+    el.value = state[id] || "";
+    el.addEventListener('input', e=>{ state[id]=e.target.value; save(); if(id==='findings'){ updateWC(); } });
+  });
+
+  // Word count + coaching
+  function updateWC(){
+    const n = wc(state.findings);
+    qs('wc').textContent = "Word count: "+n+" (target 300–400)";
+    const box = qs('wcCoaching'); box.innerHTML='';
+    function chip(txt){ const s=document.createElement('span'); s.className='chip'; s.textContent=txt; box.appendChild(s); }
+    if(n < 250){ chip('Add content: expand evidence & examples.'); }
+    else if(n < 300){ chip('Nearly there: add detail to reach 300.'); }
+    else if(n <= 400){ chip('✅ In range: balance evidence and conclusion.'); }
+    else if(n <= 450){ chip('Slightly long: trim repetition.'); }
+    else { chip('↘ Too long: focus on key points.'); }
+  }
+
+  qs('addStarters').addEventListener('click', ()=>{
+    const starters=[
+      'This inquiry explores whether insects could provide a sustainable protein source.',
+      'Current and future challenges with traditional protein include resource use and costs.',
+      'Insects may offer advantages such as efficient feed conversion and lower emissions.',
+      'Therefore, my hypothesis is …',
+      'Based on the evidence from my research, I expect …'
+    ];
+    const curr = qs('findings').value||"";
+    qs('findings').value = (curr?curr+"\\n\\n":"")+starters.join(' ');
+    state.findings = qs('findings').value; save(); updateWC();
+  });
+
+  // Findings lock/unlock
+  function applyFindingsLock(){
+    qs('findings').readOnly = !!state.findingsLocked;
+    qs('markDone').disabled = !!state.findingsLocked;
+    qs('editAgain').classList.toggle('hidden', !state.findingsLocked);
+  }
+  qs('markDone').addEventListener('click', ()=>{
+    state.findingsLocked = true; save(); applyFindingsLock(); showStatus('Marked as finished. You can Edit Again if needed.');
+  });
+  qs('editAgain').addEventListener('click', ()=>{
+    state.findingsLocked = false; save(); applyFindingsLock();
+  });
+
+  // Copy + Print + Save
+  qs('saveBtn').addEventListener('click', ()=>{ save(); showStatus('💾 Saved'); });
+  qs('copyTextBtn').addEventListener('click', copyAllText);
+  qs('printBtn').addEventListener('click', ()=>window.print());
+
+  function compilePlainText(){
+    const lines = [];
+    lines.push("Year 9 Inquiry – Insects as Sustainable Protein (Part 3)");
+    lines.push("");
+    lines.push(progressSummary());
+    lines.push('Off-task time: ' + fmtTime(state.offTaskSeconds||0));
+    const events=(state.offTaskEvents||[]).map(e=> (e.t+' — '+e.kind+(e.reason?(' ('+e.reason+')'):'')));
+    if(events.length){ lines.push('Off-task events:'); lines.push(events.join(' | ')); }
+    lines.push("");
+    lines.push("1) Current & Future Issues");
+    lines.push("Current issues:");
+    lines.push((state.issuesNow||"").trim());
+    lines.push("");
+    lines.push("Future issues:");
+    lines.push((state.issuesFuture||"").trim());
+    lines.push("");
+    lines.push("2) Pros & Cons");
+    lines.push("Pros:");
+    lines.push((state.pros||"").trim());
+    lines.push("");
+    lines.push("Cons:");
+    lines.push((state.cons||"").trim());
+    lines.push("");
+    lines.push("3) Hypothesis");
+    lines.push((state.hypo||"").trim());
+    lines.push("");
+    const words = wc(state.findings);
+    lines.push("4) Expected Findings ("+words+" words)");
+    lines.push((state.findings||"").trim());
+    if((state.teacherFb||"").trim()){
+      lines.push("");
+      lines.push("Teacher feedback:");
+      lines.push((state.teacherFb||"").trim());
+    }
+    lines.push("");
+    lines.push("Student reflection:");
+    lines.push((state.studentReflection||"").trim());
+    return lines.join("\\n");
+  }
+
+  async function copyAllText(){
+    const text = compilePlainText();
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        showStatus("✅ Copied to clipboard. Paste into your Google Doc (Ctrl+V).");
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showStatus("✅ Copied to clipboard (fallback). Paste into your Google Doc (Ctrl+V).");
+      }
+    } catch (e) {
+      showStatus("⚠️ Unable to copy here. Download and open locally, then try again.");
+    }
+  }
+
+  // Progress + ticks
+  function calcProgress(){
+    const total = totalSections;
+    let complete = 0;
+    const issuesOk = lineCount(state.issuesNow)>=3 && lineCount(state.issuesFuture)>=3;
+    const prosconsOk = lineCount(state.pros)>=3 && lineCount(state.cons)>=3;
+    const hypoOk = (state.hypo||'').trim().length>15 && /[.!?]\\s*$/.test((state.hypo||'').trim());
+    const findingsOk = wc(state.findings)>=300 && wc(state.findings)<=400 && !!state.findingsLocked;
+    if(issuesOk) complete++;
+    if(prosconsOk) complete++;
+    if(hypoOk) complete++;
+    if(findingsOk) complete++;
+    toggleDone('tabIssues', issuesOk);
+    toggleDone('tabProsCons', prosconsOk);
+    toggleDone('tabHypo', hypoOk);
+    toggleDone('tabFindings', findingsOk);
+    return {complete,total};
+  }
+  function toggleDone(tabId, done){
+    const tb = qs(tabId);
+    if(!tb) return;
+    tb.classList.toggle('done', !!done);
+  }
+  function progressSummary(){
+    const p = calcProgress();
+    return "Progress: "+p.complete+" of "+p.total+" complete";
+  }
+  function updateProgress(){
+    const p = calcProgress();
+    const pct = Math.round(p.complete/p.total*100);
+    qs('progressLabel').textContent = p.complete + " of " + p.total + " complete";
+    qs('pct').textContent = pct + "%";
+    const CIRC=176; const offset = CIRC - (CIRC * pct / 100);
+    qs('ringFg').style.strokeDashoffset = String(offset);
+  }
+
+  // Auto-feedback tiles (delegated clicks)
+  function updateAutoFeedback(){
+    const out = [];
+    const issuesNowLC = lineCount(state.issuesNow);
+    const issuesFutLC = lineCount(state.issuesFuture);
+    const prosLC = lineCount(state.pros);
+    const consLC = lineCount(state.cons);
+    const hypoLen = (state.hypo||'').trim().length;
+    const hypoEnd = /[.!?]\\s*$/.test((state.hypo||'').trim());
+    const words = wc(state.findings);
+    function tile(kind, text, btnLabel, targetTab, focusId){
+      const btn = btnLabel ? '<div class="actions"><button class="btn gotoBtn" data-target-tab="'+targetTab+'" data-focus-id="'+focusId+'">'+btnLabel+'</button></div>' : '';
+      return '<div class="tip '+kind+'"><div>'+text+'</div>'+btn+'</div>';
+    }
+    if(issuesNowLC>=3 && issuesFutLC>=3){
+      out.push(tile('ok','✅ Issues: minimum met.','Review','issues','issuesNow'));
+    } else {
+      const focus = (issuesNowLC<3 ? 'issuesNow' : 'issuesFuture');
+      out.push(tile('bad','↗ Issues: aim for 3+ dot points in both boxes.','Go to Issues 🌍','issues',focus));
+    }
+    if(prosLC>=3 && consLC>=3){
+      out.push(tile('ok','✅ Pros/Cons: minimum met.','Review','proscons','pros'));
+    } else {
+      const focus = (prosLC<3 ? 'pros' : 'cons');
+      out.push(tile('warn','↗ Pros/Cons: aim for 3+ points in both boxes.','Go to Pros & Cons ⚖️','proscons',focus));
+    }
+    if((hypoLen>15 && hypoEnd)){
+      out.push(tile('ok','✅ Hypothesis: clear single sentence.','Review','hypo','hypo'));
+    } else {
+      out.push(tile('warn','↗ Hypothesis: write one sentence that ends with a full stop.','Go to Hypothesis 💡','hypo','hypo'));
+    }
+    if(words===0){
+      out.push(tile('bad','↗ Findings: start drafting 300–400 words.','Go to Findings 📖','findings','findings'));
+    } else if(words<300){
+      out.push(tile('warn','↗ Findings: currently '+words+' words — add detail to reach 300.','Go to Findings 📖','findings','findings'));
+    } else if(words<=400){
+      out.push(tile('ok','✅ Findings: '+words+' words in range. Consider clarity and conclusion.','Review','findings','findings'));
+    } else {
+      out.push(tile('warn','↘ Findings: '+words+' words — trim to focus on strongest points.','Go to Findings 📖','findings','findings'));
+    }
+    qs('autoFeedback').innerHTML = out.join("");
+  }
+  const fbRoot = qs('autoFeedback');
+  if (fbRoot) {
+    fbRoot.addEventListener('click', (e)=>{
+      const btn = e.target.closest('.gotoBtn');
+      if (btn) {
+        const t = btn.getAttribute('data-target-tab');
+        const f = btn.getAttribute('data-focus-id');
+        goTab(t, f);
+      }
+    });
+  }
+
+  function showStatus(msg){
+    const el = qs('statusArea'); if(!el) return;
+    el.textContent = msg; el.style.display='block';
+    setTimeout(()=>{ el.style.display='none'; }, 3500);
+  }
+
+  // Off-task tracking -------------------------------------------------
+  let offStart = null;
+  function updateOffTaskUI(){
+    const badge = qs('offTaskBadge'); if(badge){ badge.textContent = 'Off‑task: ' + fmtTime(state.offTaskSeconds||0); }
+    const label = qs('offTaskLabel'); if(label){ label.textContent = 'Off‑task: ' + fmtTime(state.offTaskSeconds||0); }
+    renderOffTaskLog();
+  }
+  function beginOffTask(){ if(offStart==null){ offStart = Date.now(); } }
+  function endOffTask(){ if(offStart!=null){ const delta = Math.floor((Date.now()-offStart)/1000); state.offTaskSeconds = (state.offTaskSeconds||0) + delta; offStart=null; save(); updateOffTaskUI(); } }
+  function logEvent(kind, reason){ state.offTaskEvents = state.offTaskEvents || []; state.offTaskEvents.push({t: nowISO(), kind, reason}); if(state.offTaskEvents.length>200){ state.offTaskEvents.shift(); } save(); renderOffTaskLog(); }
+  function renderOffTaskLog(){ const el=qs('offTaskLog'); if(!el) return; const L=(state.offTaskEvents||[]).slice(-8); el.innerHTML = L.map(e=> '• '+e.t.replace('T',' ').replace('Z','')+' — '+e.kind+(e.reason?(' ('+e.reason+')'):'')).join('<br/>'); }
+  const resetBtn = qs('resetOffTask'); if(resetBtn){ resetBtn.addEventListener('click', ()=>{ state.offTaskSeconds=0; save(); updateOffTaskUI(); showStatus('Focus tracker reset'); }); }
+
+  
+// Focus Mode disabled in this build
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e)=>{
+    if(e.altKey){
+      const map = {'1':'intro','2':'issues','3':'proscons','4':'hypo','5':'findings','6':'rubric','7':'feedback'};
+      if(map[e.key]){ switchTab(map[e.key]); }
+    }
+  });
+
+  // Init
+  updateWC();
+  applyFindingsLock();
+  updateProgress();
+  updateAutoFeedback();
+  stampSave();
+  updateOffTaskUI();
+});
+</script>
+</body>
+</html>
