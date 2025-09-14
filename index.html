@@ -95,6 +95,24 @@ textarea{min-height:240px; resize:vertical}
 button#focusBtn{background:linear-gradient(180deg,#ffe9b8,#ffd27a); color:#6a3a00; border:1px solid #ffc25e}
 button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color:#0b3b26; border:1px solid #7cdeb3}
 .badge#offTaskBadge{background:#fff7f0; border-color:#ffd7b5; color:#6a3a00}
+
+#student-instructions { margin-block: 2rem; }
+#student-instructions .toc ul { list-style: none; padding: 0; margin: .25rem 0 1rem; display: flex; flex-wrap: wrap; gap: .75rem; }
+#student-instructions .toc a { text-decoration: underline; }
+#student-instructions .table-wrap { overflow-x: auto; }
+#student-instructions table.steps { width: 100%; border-collapse: collapse; }
+#student-instructions table.steps th,
+#student-instructions table.steps td { border: 1px solid #e5e7eb; padding: .75rem; vertical-align: top; }
+#student-instructions table.steps th { background: #f8fafc; text-align: left; }
+#student-instructions blockquote.example { margin: .5rem 0 0; padding: .75rem 1rem; border-left: 4px solid #94a3b8; background: #f1f5f9; }
+@media (max-width: 700px){
+  #student-instructions table.steps thead { display: none; }
+  #student-instructions table.steps tr { display: block; border: 1px solid #e5e7eb; margin-bottom: .75rem; }
+  #student-instructions table.steps td { display: block; border: none; border-top: 1px solid #e5e7eb; }
+  #student-instructions table.steps td:first-child { border-top: none; font-weight: 600; }
+}
+
+.header .controls .instructions-link{color:var(--leaf); font-weight:600; text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -126,13 +144,14 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
         <div id="progressLabel">0 of 4 complete</div>
       </div>
       
-      <button id="saveBtn" title="Save now">Save</button>
-      <button id="copyTextBtn" title="Copy all text to clipboard">Copy Text</button>
-      <button class="ghost" id="printBtn" title="Print or save as PDF">Print / PDF</button>
+        <button id="saveBtn" title="Save now">Save</button>
+        <button id="copyTextBtn" title="Copy all text to clipboard">Copy Text</button>
+        <button class="ghost" id="printBtn" title="Print or save as PDF">Print / PDF</button>
+        <a href="#student-instructions" class="instructions-link">Instructions</a>
+      </div>
     </div>
-  </div>
 
-  <nav class="tabbar" role="tablist" aria-label="Sections">
+    <nav class="tabbar" role="tablist" aria-label="Sections">
     <button class="tab active" id="tabIntro" role="tab" aria-selected="true"><span class="icon">🐛</span>Intro &amp; Instructions</button>
     <button class="tab" id="tabIssues" role="tab" aria-selected="false"><span class="icon">🌍</span>Issues <span class="tick">✔</span></button>
     <button class="tab" id="tabProsCons" role="tab" aria-selected="false"><span class="icon">⚖️</span>Pros &amp; Cons <span class="tick">✔</span></button>
@@ -145,34 +164,89 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
   <div id="statusArea" class="status" role="status" aria-live="polite"></div>
   <div id="compatNotice" class="status" style="display:none">If buttons don’t work, download and open this file from your Downloads folder (not the Drive preview).</div>
 
-  <main class="card" id="introTab">
-    <header><span class="icon">🐛</span><span>Intro &amp; Instructions</span></header>
-    <section class="section">
-      <div class="mini">
-        <header>Overview</header>
-        <p>You are investigating the future of <b>insects as a sustainable protein source</b>. Your job is to build a short research inquiry and explain your findings clearly.</p>
-      </div>
-      <div class="mini">
-        <header>Steps to complete</header>
-        <ol>
-          <li><b>Issues (🌍):</b> Write at least 3 current issues and 3 future issues with traditional protein sources.</li>
-          <li><b>Pros &amp; Cons (⚖️):</b> List at least 3 pros and 3 cons of using insects as protein.</li>
-          <li><b>Hypothesis (💡):</b> Write one clear sentence answering if insects are a viable large-scale protein source (include timeframe/conditions).</li>
-          <li><b>Findings (📖):</b> Write a 300–400 word report. Restate your hypothesis, use evidence, explain conditions/limitations, and conclude clearly.</li>
-          <li><b>Feedback (💬):</b> Check automatic feedback, review the rubric, and read teacher notes if provided.</li>
-        </ol>
-      </div>
-      <div class="mini">
-        <header>Success tips</header>
+    <main class="card" id="introTab">
+      <header><span class="icon">🐛</span><span>Intro &amp; Instructions</span></header>
+      <section id="student-instructions" aria-labelledby="instr-title">
+        <h2 id="instr-title">Year 9 Inquiry – <em>Insects as Sustainable Protein</em></h2>
+
+        <nav aria-label="On this page" class="toc">
+          <strong>On this page:</strong>
+          <ul>
+            <li><a href="#task">Task overview</a></li>
+            <li><a href="#steps">Steps to complete</a></li>
+            <li><a href="#tips">Success tips</a></li>
+            <li><a href="#rubric">Rubric &amp; grading</a></li>
+            <li><a href="#example-hypothesis">Example hypothesis</a></li>
+          </ul>
+        </nav>
+
+        <p id="task">
+          You will conduct a short research inquiry on whether insects are a viable sustainable protein source.
+          Present your thinking clearly and back it up with evidence.
+        </p>
+
+        <h3 id="steps">Steps to complete</h3>
+        <div class="table-wrap" role="region" aria-label="Steps table">
+          <table class="steps">
+            <thead>
+              <tr>
+                <th scope="col">Step</th>
+                <th scope="col">What to do</th>
+                <th scope="col">Minimum requirements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Issues: Current &amp; Future</strong></td>
+                <td>Identify issues with <em>traditional protein sources</em> (beef, chicken, fish) for both now and the future.</td>
+                <td>At least <strong>3 current</strong> issues and <strong>3 future</strong> issues. Dot-points; be specific.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Pros &amp; Cons</strong></td>
+                <td>List advantages and disadvantages of using insects as a protein source.</td>
+                <td>At least <strong>3 pros</strong> and <strong>3 cons</strong>. Use concrete examples.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Hypothesis</strong></td>
+                <td>Write <strong>one clear, testable sentence</strong> stating if/when/where insects could be viable and under what conditions.</td>
+                <td>One sentence including: a clear claim + conditions/timeframe/location.</td>
+              </tr>
+              <tr>
+                <td><strong>4. Findings Report</strong></td>
+                <td>Write a report that restates your hypothesis, uses evidence from Steps 1–2, explains conditions/limits, and ends with a clear conclusion.</td>
+                <td><strong>300–400 words</strong>. Paragraphs, evidence, and linking phrases (e.g., “therefore”, “however”).</td>
+              </tr>
+              <tr>
+                <td><strong>5. Review &amp; Feedback</strong></td>
+                <td>Check your work against the rubric. Read teacher notes. Write one change you will make based on feedback.</td>
+                <td>Honest reflection and at least one specific improvement you will make.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="tips">Success tips</h3>
         <ul>
-          <li>Aim for clear, specific points in dot-point sections.</li>
-          <li>Keep your hypothesis short, direct, and testable.</li>
-          <li>Stay between <b>300–400 words</b> for Findings.</li>
-          <li>Use the <b>Rubric (📊)</b> to understand how your work is graded.</li>
+          <li><strong>Be specific:</strong> avoid vague phrases like “environmental issues”. Use exact terms (e.g., greenhouse gases, water use, land degradation).</li>
+          <li><strong>Testable hypothesis:</strong> something that could be supported or challenged with evidence.</li>
+          <li><strong>Use evidence:</strong> facts, data, case studies, examples; don’t just assert.</li>
+          <li><strong>Acknowledge limits:</strong> cost, cultural acceptance, technology, regulation, scalability.</li>
+          <li><strong>Word count:</strong> 300–400 usually gives enough depth without losing focus.</li>
         </ul>
-      </div>
-    </section>
-  </main>
+
+        <h3 id="rubric">Rubric &amp; grading</h3>
+        <p>
+          Your work is graded using the rubric on this page. As you draft, check: have you completed all steps,
+          explained your reasoning, and supported claims with evidence?
+        </p>
+
+        <h3 id="example-hypothesis">Example of a good hypothesis</h3>
+        <blockquote class="example">
+          “By 2030, with improved farming techniques and regulatory support, insects could supply up to 20% of protein needs
+          in food-insecure regions.”
+        </blockquote>
+      </section>
+    </main>
 
   <main class="card hidden" id="issuesTab">
     <header><span class="icon">🌍</span><span>1) Current &amp; Future Issues</span></header>
