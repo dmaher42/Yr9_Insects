@@ -287,6 +287,25 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
   <main class="card hidden" id="hypoTab">
     <header><span class="icon">💡</span><span>3) Hypothesis</span></header>
     <section class="section">
+      <div class="kb"><button class="ghost" id="hypoScaffoldToggle">Show Scaffold</button></div>
+      <div id="hypoScaffold" class="hidden">
+        <div class="mini">
+          <header>What is a hypothesis?</header>
+          <p class="helper">A hypothesis is your best guess, written in one clear sentence, about whether insects could be a good protein source in the future.</p>
+        </div>
+        <div class="mini">
+          <header>Sentence Starters</header>
+          <ul class="helper">
+            <li>I think insects could/could not be a good protein source because…</li>
+            <li>Insects will be useful as protein in the future if…</li>
+            <li>Insects are not likely to be used as protein because…</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <header>Sentence Frame</header>
+          <div class="helper"><strong>Position</strong> – <strong>Reason</strong> – <strong>Condition/Time</strong></div>
+        </div>
+      </div>
       <div class="mini">
         <header>Instructions</header>
         <p class="helper">Write ONE clear sentence that states your claim, including where/when/conditions. End with a full stop.</p>
@@ -301,6 +320,29 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
   <main class="card hidden" id="findingsTab">
     <header><span class="icon">📖</span><span>4) Expected Findings (300–400 words)</span></header>
     <section class="section">
+      <div class="kb"><button class="ghost" id="findingsScaffoldToggle">Show Scaffold</button></div>
+      <div id="findingsScaffold" class="hidden">
+        <div class="mini">
+          <header>Scaffold for Writing</header>
+          <ol class="helper">
+            <li>Restate your hypothesis.</li>
+            <li>Evidence from Issues.</li>
+            <li>Evidence from Pros &amp; Cons.</li>
+            <li>Conditions/Limitations.</li>
+            <li>Conclusion.</li>
+          </ol>
+        </div>
+        <div class="mini">
+          <header>Sentence Starters</header>
+          <ul class="helper">
+            <li>My hypothesis is…</li>
+            <li>One issue with traditional protein is…</li>
+            <li>One benefit of insects as protein is…</li>
+            <li>For insects to be used, it would need…</li>
+            <li>In conclusion, I believe…</li>
+          </ul>
+        </div>
+      </div>
       <div class="mini">
         <header>Helpful tools</header>
         <div class="kb">
@@ -308,15 +350,6 @@ button#focusBtn.active{background:linear-gradient(180deg,#b8ffd6,#7addb1); color
         </div>
         <div class="helper" id="wc">Word count: 0 (target 300–400)</div>
         <div id="wcCoaching" class="kb"></div>
-      </div>
-      <div class="mini">
-        <header>Guidance</header>
-        <ol class="helper">
-          <li>Restate your hypothesis.</li>
-          <li>Use evidence from your Issues and Pros/Cons tabs.</li>
-          <li>Note important conditions or limitations.</li>
-          <li>Finish with a clear conclusion (yes/no/depends) and why.</li>
-        </ol>
       </div>
       <div class="mini">
         <header>Your writing</header>
@@ -517,6 +550,19 @@ document.addEventListener('DOMContentLoaded', function(){
     qs('findings').value = (curr?curr+"\\n\\n":"")+starters.join(' ');
     state.findings = qs('findings').value; save(); updateWC();
   });
+
+  // Scaffold toggle helpers
+  function bindScaffold(btnId, boxId){
+    const btn = qs(btnId);
+    const box = qs(boxId);
+    if(!btn || !box) return;
+    btn.addEventListener('click', ()=>{
+      const hidden = box.classList.toggle('hidden');
+      btn.textContent = hidden ? 'Show Scaffold' : 'Hide Scaffold';
+    });
+  }
+  bindScaffold('hypoScaffoldToggle','hypoScaffold');
+  bindScaffold('findingsScaffoldToggle','findingsScaffold');
 
   // Findings lock/unlock
   function applyFindingsLock(){
